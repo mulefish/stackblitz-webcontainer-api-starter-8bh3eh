@@ -17,6 +17,7 @@
           `${host}experiment-module/${version}/experiment-module-remoteEntry.js?time=${now}`,
           `${host}%40lululemon/mwa-analytics/latest/browser/mwa-analytics.js?time=${now}`,
           `version4.js`,
+          `memory.js`
         ];
         resources.forEach((thing) => {
           const script = document.createElement('script');
@@ -62,39 +63,25 @@
       <button onClick="setStore()" class="meta">SetStore</button>
       <button onClick="getStore()" class="meta">GetStore</button>
       <button onClick="showTdr()" class="meta">TDR</button>
+      <button onClick="launchModal()" class="meta">Memory</button>
+
       <!-- <button onClick="showPurchase()" class="meta">showPurchase</button>
       <button onClick="showSearch()" class="meta">showSearch</button> -->
       &nbsp;<span id="statusOfTheSend">&nbsp;</span>
 
-      <!-- <input
-        type="radio"
-        id="option1"
-        name="option"
-        value="schemaView"
-        checked
-        onchange="setSelectedOption()"
-      />
-      <label for="option1">Short Schema</label>
 
-      <input
-        type="radio"
-        id="option2"
-        name="option"
-        value="optionalityView"
-        onchange="setSelectedOption()"
-      />
-      <label for="option2">optionalityView</label>
-
-      <input
-        type="radio"
-        id="option3"
-        name="option"
-        value="transformationView"
-        onchange="setSelectedOption()"
-      />
-      <label for="option2">transformationView</label> -->
 
       <div id="buttons"></div>
+
+
+      <div id="myModal" class="modal">
+        <!-- Modal content -->
+        <div class="modal-content">
+          <div onClick="closeModal()" class="close">&times;!</div>
+          <iframe id='modalContent' src="modal.html"></iframe>
+        </div>
+      </div>
+
       <textarea id="bottom_left_textArea" spellcheck="false"></textarea>
       <textarea id="bottom_right_textArea" spellcheck="false"></textarea>
     </div>
