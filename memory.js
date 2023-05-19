@@ -1,6 +1,5 @@
 const modal = document.getElementById("myModal");
 function launchModal() {
-    console.log("launchModal")
     modal.style.display = "block";
 }
 
