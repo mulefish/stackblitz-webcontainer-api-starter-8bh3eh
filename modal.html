@@ -1,45 +1,77 @@
 <style>
     #eventNote {
-        width:900px;
-        height:500px;
+        width: 900px;
+        height: 500px;
     }
-    #title { 
-        width:95%;
+
+    #title {
+        width: 95%;
     }
 </style>
 <table border="1">
-<tr>
-    <td valign="top">
-<table border="1">
-
-    <tr><td>Title</td><td><input type="text" id="title" value=""></td></tr>
-    <tr><td>Creation Date</td><td id="creationDate" ></td></tr>
-    <tr><td>Event</td><td><div id="event"></div></tr>
-    <tr><td colspan="2">Json</td></tr>
-    <tr><td colspan="2">
-        <!-- This will be the JSON for json but it could be a note - open ended! -->
-        <textarea id="eventNote" value=""> </textarea>
-        </td></tr>
-
     <tr>
-        <td><button>save</button></td>
-        <td><button>zap</button></td>
+        <td valign="top">
+            <table border="1">
+
+                <tr>
+                    <td>Title</td>
+                    <td><input type="text" id="title" value=""></td>
+                </tr>
+                <tr>
+                    <td>Creation Date</td>
+                    <td id="creationDate"></td>
+                </tr>
+                <tr>
+                    <td>Event</td>
+                    <td>
+                        <div id="event"></div>
+                </tr>
+                <tr>
+                    <td colspan="2">Json</td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <!-- This will be the JSON for json but it could be a note - open ended! -->
+                        <textarea id="eventNote" value=""> </textarea>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td><button>save</button></td>
+                    <td><button>zap</button></td>
+                </tr>
+
+            </table>
+        </td>
+        <td valign="top">
+
+            <select size="10">
+                <option>app-response</option>
+                <option>error</option>
+                <option>general-component-event</option>
+                <option>page-products-displayed</option>
+                <option>page-view</option>
+                <option>product-interaction</option>
+                <option>purchase</option>
+
+            </select>
+
+            <script>
+                window.addEventListener("message", gotMessageFromParent, false);
+                function gotMessageFromParent(event) {
+                    const msg = "Mother says:\n" + JSON.stringify(event.data) 
+                    console.log("%c" + msg, "background:yellow");
+                }
+                function sendMessage() {
+                    try {
+                        console.log("%c sendMessage ", "background:yellow")
+                        window.parent.postMessage("Hello from the child page!", "*");
+                    } catch (boom) {
+                        console.error(boom)
+                    }
+                }
+            </script>
+            <button onclick="sendMessage()">sendMessage! </button>
+
+        </td>
     </tr>
-
-    </table>
-</td>
-<td valign="top">
-
-    <select size="10">
-        <option>app-response</option>
-        <option>error</option>
-        <option>general-component-event</option>
-        <option>page-products-displayed</option>
-        <option>page-view</option>
-        <option>product-interaction</option>
-        <option>purchase</option>
-    
-    </select>
-</td>
-</tr>
-
