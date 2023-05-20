@@ -100,6 +100,29 @@ const default_events = {
                 }
             ]
         }
+    },
+    "page-view": {
+        event: "page-view",
+        created: getPrettyDate(),
+        json: {}
+    },
+    "product-interaction": {
+        event: "product-interaction",
+        created: getPrettyDate(),
+        json: {
+            "component": {
+                "id": "string",
+                "type": "string",
+                "text": "string"
+            }
+        }
+    },
+    "purchase": {
+        event: "purchase",
+        created: getPrettyDate(),
+        json: {
+            "orderId": "string"
+        }
     }
 }
 // COMMENT IN FOR TDD! 

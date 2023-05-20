@@ -55,9 +55,9 @@ function test_all_the_defaults_are_there() {
 }
 
 function runner() {
+    test_all_the_defaults_are_there()
     test_prettyDate()
     test_default_events()
-    test_all_the_defaults_are_there()
 }
 runner()
 
