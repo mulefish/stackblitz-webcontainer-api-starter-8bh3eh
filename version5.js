@@ -25,19 +25,36 @@ function flattenTransformationModule_defaultCategorizedEvents() {
     2
   );
 }
+// function beautify() {
+//   try {
+//     const x = document.getElementById('bottom_left_textArea').value;
+//     const obj = JSON.parse(x);
+//     document.getElementById('bottom_left_textArea').value = JSON.stringify(
+//       obj,
+//       null,
+//       2
+//     );
+//     console.log( obj)
+//     return true 
+//   } catch (boom) {
+//     alert(boom);
+//     return false 
+//   }
+// }
 function beautify() {
   try {
-    const x = document.getElementById('bottom_left_textArea').value;
-    const obj = JSON.parse(x);
-    document.getElementById('bottom_left_textArea').value = JSON.stringify(
-      obj,
-      null,
-      2
-    );
-  } catch (boom) {
-    alert(boom);
+      giveHumanSomeHappyFeedBack()
+
+      const rawString = document.getElementById("bottom_left_textArea").value
+      const pretty = JSON.parse(rawString)
+      document.getElementById("bottom_left_textArea").value = JSON.stringify(pretty, null, 2)
+      return true
+  } catch (your_json_is_ugly) {
+      alert("Your json is illformed\nOr it is empty!\n---------\n" + your_json_is_ugly.message)
+      return false
   }
 }
+
 function inflateFlatMap(simple) {
   const complex = {};
   for (const key in simple) {
@@ -209,8 +226,8 @@ function makeItRightShape(map, eventName) {
   }
 }
 
-function loadDefaultsIntoLocalStorageIfNeeded() {  
-  
+function loadDefaultsIntoLocalStorageIfNeeded() {
+
 
 
 
@@ -241,7 +258,7 @@ function getThisEvent(eventName) {
       'payload'
     ]
   );
-  */ 
+  */
   /* 
   const flat_transformThing = flatten(transformThing);
   document.getElementById('bottom_right_textArea').value = JSON.stringify(
@@ -255,7 +272,7 @@ function getThisEvent(eventName) {
     null,
     2
   );
-  */ 
+  */
 }
 
 
@@ -283,7 +300,7 @@ function loadThisEvent(eventName) {
 
   const transformThing = inflateFlatMap(
     transformationModule.defaultCategorizedEvents[eventName]['default']['$'][
-      'payload'
+    'payload'
     ]
   );
   const flat_transformThing = flatten(transformThing);
@@ -376,9 +393,9 @@ async function sendIt() {
 ///////////////////// NEW LOGIC //////////////
 function log(msg) {
   if (typeof msg === "object") {
-      console.log("%c" + JSON.stringify(msg), MAIN_LOG_COLOR)
+    console.log("%c" + JSON.stringify(msg), MAIN_LOG_COLOR)
   } else {
-      console.log("%c" + msg, MAIN_LOG_COLOR)
+    console.log("%c" + msg, MAIN_LOG_COLOR)
   }
 }
 
@@ -391,16 +408,16 @@ function populateDropdown() {
   keys = keys.sort()
   const newOptionsData = []
   keys.forEach((key) => {
-      newOptionsData.push({ value: key, text: key })
+    newOptionsData.push({ value: key, text: key })
   })
   const dropdown = document.getElementById("definedEventsSelector");
   dropdown.innerHTML = '';
   newOptionsData.forEach(option => {
-      const { value, text } = option;
-      const optionElement = document.createElement("option");
-      optionElement.value = value;
-      optionElement.text = text;
-      dropdown.appendChild(optionElement);
+    const { value, text } = option;
+    const optionElement = document.createElement("option");
+    optionElement.value = value;
+    optionElement.text = text;
+    dropdown.appendChild(optionElement);
   });
 }
 function handleSelectChange() {
@@ -414,17 +431,16 @@ function handleSelectChange() {
   document.getElementById("event").value = event.event
   document.getElementById("creationDate").innerHTML = event.created
   try {
-      document.getElementById("bottom_left_textArea").value = JSON.stringify(event.json, null, 2)
-      giveHumanSomeHappyFeedBack
+    document.getElementById("bottom_left_textArea").value = JSON.stringify(event.json, null, 2)
   } catch (ignore_because_it_might_not_be_json) {
-      document.getElementById("bottom_left_textArea").value = event.json
+    document.getElementById("bottom_left_textArea").value = event.json
   }
 }
 function giveHumanSomeHappyFeedBack() {
   const node = document.getElementById("feedback");
   node.style.backgroundColor = "lightgreen";
   setTimeout(() => {
-      node.style.backgroundColor = ""
+    node.style.backgroundColor = ""
   }, 500);
 }
 
@@ -435,4 +451,87 @@ function addNewThingIntoDroplist(title) {
   newOption.text = title
   dropdown.appendChild(newOption)
 }
+
+function save() {
+
+  function getPrettyDate() {
+    const date = new Date()
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+
+    return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
+  }
+
+  function addNewThingIntoDroplist(title) {
+    const dropdown = document.getElementById("definedEventsSelector")
+    const newOption = document.createElement("option")
+    newOption.value = title
+    newOption.text = title
+    dropdown.appendChild(newOption)
+    newOption.selected = true
+  }
+
+  function setAsSelectedThisThing(title) {
+    const dropdown = document.getElementById("definedEventsSelector")
+    for (let i = 0; i < dropdown.options.length; i++) {
+      const option = dropdown.options[i];
+      if (option.value === title) {
+        option.selected = true;
+        break;
+      }
+    }
+  }
+try { 
+  const wellFormedJson = document.getElementById("bottom_left_textArea").value
+
+  
+
+  if (beautify() === true) {
+
+
+
+    const mightBeGood = {
+      title: document.getElementById("title").value,
+      event: document.getElementById("event").value,
+      created: getPrettyDate(),
+      json: wellFormedJson
+    }
+    let isOk = true
+    const failures = []
+    for (let key in mightBeGood) {
+      if (mightBeGood[key].length < 2) {
+        failures.push(key)
+        isOk = false
+      }
+    }
+    if (isOk === false) {
+      alert("You are missing fields\nNote: Need at least 1 char per field:\n" + JSON.stringify(failures))
+    } else {
+      const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
+      const events = JSON.parse(rawString)
+      if (!events.hasOwnProperty(mightBeGood.title)) {
+        addNewThingIntoDroplist(mightBeGood.title)
+      } else {
+        setAsSelectedThisThing(mightBeGood.title)
+      }
+
+      events[mightBeGood.title] = {
+        event: mightBeGood.event,
+        created: mightBeGood.created,
+        json: JSON.parse(mightBeGood.json)
+      }
+      giveHumanSomeHappyFeedBack()
+      localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(events));
+    }
+  }
+
+} catch (ouch) {
+  alert( ouch )
+}
+}
+
 populateDropdown()
