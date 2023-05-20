@@ -86,14 +86,6 @@
                         node.style.backgroundColor = ""
                     }, 500);
                 }
-                function giveHumanSomeSadFeedBack() {
-                    const node = document.getElementById("feedback");
-                    node.style.backgroundColor = "orange";
-                    setTimeout(() => {
-                        node.style.backgroundColor = "";
-                    }, 500);
-                }
-
             </script>
             <button onclick="clearModal()">clear</button>
             <br />
@@ -167,7 +159,6 @@
             const selectedIndex = dropdown.selectedIndex
             if (selectedIndex < 0) {
                 alert("Nothing has been selected!")
-                giveHumanSomeSadFeedBack()
             } else {
                 giveHumanSomeHappyFeedBack()
 
@@ -207,8 +198,7 @@
                 document.getElementById("eventJson").value = JSON.stringify(pretty, null, 2)
                 return true
             } catch (your_json_is_ugly) {
-                giveHumanSomeSadFeedBack()
-                alert("Your json is illformed:\n" + your_json_is_ugly.message)
+                alert("Your json is illformed\nOr it is empty\n---------\n" + your_json_is_ugly.message)
                 return false
             }
         }
@@ -254,6 +244,16 @@
                 newOption.selected = true
             }
 
+            function setAsSelectedThisThing(title) {
+                const dropdown = document.getElementById("definedEventsSelector")
+                for (let i = 0; i < dropdown.options.length; i++) {
+                    const option = dropdown.options[i];
+                    if (option.value === title) {
+                        option.selected = true;
+                        break;
+                    }
+                }
+            }
             const wellFormedJson = document.getElementById("eventJson").value
             if (beautify() === true) {
                 const mightBeGood = {
@@ -277,6 +277,8 @@
                     const events = JSON.parse(rawString)
                     if (!events.hasOwnProperty(mightBeGood.title)) {
                         addNewThingIntoDroplist(mightBeGood.title)
+                    } else {
+                        setAsSelectedThisThing(mightBeGood.title)
                     }
 
                     events[mightBeGood.title] = {
@@ -284,8 +286,6 @@
                         created: mightBeGood.created,
                         json: JSON.parse(mightBeGood.json)
                     }
-
-
                     giveHumanSomeHappyFeedBack()
                     localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(events));
                 }

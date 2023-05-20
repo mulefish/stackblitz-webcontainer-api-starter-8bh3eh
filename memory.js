@@ -21,20 +21,16 @@ window.onclick = function (event) {
 window.addEventListener("message", gotMessageFromIFrame, false);
 function gotMessageFromIFrame(event) {
     const command = event.data
-    console.log("VERB: " + command )
     if (command.verb === "checkLocalstorage") {
         const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
         const events = JSON.parse(rawString)
         console.log(JSON.stringify( events, null ,2 ))
+    } else {
+        // FUN! Uncaught errors bubble up to here! Good to know!
+        // Note: This will happen when a illformed SAVE is attempted in the modal
+        // Note note: This is not bad. Merely interesting.
+        console.log("Uncaught error! " + JSON.stringify( event.data))
     } 
-
-    // } else {
-    //     const msg = "gotMessageFromIFrame:" +  event.data
-    //     console.log("%c " + JSON.stringify(msg), MEMORY_CONTROLLER_LOG_COLOR);              
-    // }
-
-
-
 }
 ////////////// FROM PARENT TO CHILD 
 const iframe = document.getElementById("modalContent");
