@@ -146,7 +146,7 @@
       let seen = {};
       const coo = Object.keys(everything['categoricalOptionalityObjects']);
       coo.forEach((thing, i) => {
-        console.log(i + "   " + JSON.stringify( thing ))
+
         const payloads = Object.keys(
           everything['categoricalOptionalityObjects'][thing]['default'][
           'payload'
@@ -185,6 +185,7 @@
       }
       return flattenObject(objectToFlatten);
     }
+
 
     function inflateObject(eventType) {
       const EVENT_TYPE = eventType.toUpperCase();
@@ -228,13 +229,30 @@
           const x = inflateObject(namedEvent);
           lookup[namedEvent] = x;
         }
+        // 
+        const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
+        const eventsFromLocalStorage = JSON.parse(rawString)
 
-         let buttons = '';
+        let buttons = '';
+        let added = 0 
         namedEvents.forEach((event) => {
-          console.log( event )
-//          buttons += `<button onClick='loadThisEvent("${event}")'>${event}</button>`;
+          // console.log( event )
+          buttons += `<button onClick='loadThisEvent("${event}")'>${event}</button>`;
+          if (!eventsFromLocalStorage.hasOwnProperty(event)) {
+            const created = getPrettyDate()
+            eventsFromLocalStorage[event] = {
+              "title": event,
+              "event": event,
+              "created": created,
+              "json": getThisEvent(event)
+            }
+            log("New event detected: adding " + eventsFromLocalStorage[event].title)
+            added++
+          }
         });
-
+        if ( added > 0 ) {
+          localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(eventsFromLocalStorage));
+        }
         document.getElementById('buttons').innerHTML = buttons;
       } catch (boom) {
         alert(boom);

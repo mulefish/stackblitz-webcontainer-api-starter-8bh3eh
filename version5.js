@@ -217,6 +217,48 @@ function loadDefaultsIntoLocalStorageIfNeeded() {
 
 }
 
+function getThisEvent(eventName) {
+  const flat_everything = flatten(everything);
+
+  let flat_object = flatten(
+    everything['categoricalOptionalityObjects'][eventName]['default']['payload']
+  );
+  flat_object = buildEventWhileIgnoringTheAutomaticallyGiven(flat_object);
+  let keys = Object.keys(flat_object);
+  keys = reverseSortStringsOnLength(keys);
+  keys = upperCasify(keys);
+  const found = superExpensiveMatch(flat_everything, keys);
+  const inflatedThing = inflateFlatMap(found);
+  return inflatedThing
+  //const whatToSend = makeItRightShape(inflatedThing, eventName);
+  //return whatToSend
+  /* 
+  currentEventName = eventName;
+  document.getElementById('event').value = eventName;
+
+  const transformThing = inflateFlatMap(
+    transformationModule.defaultCategorizedEvents[eventName]['default']['$'][
+      'payload'
+    ]
+  );
+  */ 
+  /* 
+  const flat_transformThing = flatten(transformThing);
+  document.getElementById('bottom_right_textArea').value = JSON.stringify(
+    flat_transformThing,
+    null,
+    2
+  );
+
+  document.getElementById('bottom_left_textArea').value = JSON.stringify(
+    whatToSend,
+    null,
+    2
+  );
+  */ 
+}
+
+
 
 
 function loadThisEvent(eventName) {
@@ -386,4 +428,11 @@ function giveHumanSomeHappyFeedBack() {
   }, 500);
 }
 
+function addNewThingIntoDroplist(title) {
+  const dropdown = document.getElementById("definedEventsSelector")
+  const newOption = document.createElement("option")
+  newOption.value = title
+  newOption.text = title
+  dropdown.appendChild(newOption)
+}
 populateDropdown()
