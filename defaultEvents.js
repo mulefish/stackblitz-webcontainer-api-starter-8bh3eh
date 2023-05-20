@@ -89,24 +89,24 @@ const default_events = {
         created: getPrettyDate(),
         json: {}
     },
-    "product-interaction": {
-        event: "product-interaction",
-        created: getPrettyDate(),
-        json: {
-            "component": {
-                "id": "string",
-                "type": "string",
-                "text": "string"
-            }
-        }
-    },
-    "purchase": {
-        event: "purchase",
-        created: getPrettyDate(),
-        json: {
-            "orderId": "string"
-        }
-    },
+    // "product-interaction": {
+    //     event: "product-interaction",
+    //     created: getPrettyDate(),
+    //     json: {
+    //         "component": {
+    //             "id": "string",
+    //             "type": "string",
+    //             "text": "string"
+    //         }
+    //     }
+    // },
+    // "purchase": {
+    //     event: "purchase",
+    //     created: getPrettyDate(),
+    //     json: {
+    //         "orderId": "string"
+    //     }
+    // },
     "kittycats": {
         event: "test",
         created: getPrettyDate(),

@@ -1,6 +1,7 @@
+const MAIN_LOG_COLOR = "background:lightblue"
 function flattenCategoricalOptionalityObjects() {
   const flat = flatten(everything);
-  document.getElementById('selectedEvent').innerHTML =
+  document.getElementById('event').value =
     'Flat CategoricalOptionalityObjects';
   document.getElementById('bottom_right_textArea').value = JSON.stringify(
     flat,
@@ -16,7 +17,7 @@ function setSelectedOption() {
 
 function flattenTransformationModule_defaultCategorizedEvents() {
   const flat = flatten(transformationModule.defaultCategorizedEvents);
-  document.getElementById('selectedEvent').innerHTML =
+  document.getElementById('event').value =
     'Flat TransformationModule';
   document.getElementById('bottom_right_textArea').value = JSON.stringify(
     flat,
@@ -236,7 +237,7 @@ function loadThisEvent(eventName) {
   const whatToSend = makeItRightShape(inflatedThing, eventName);
 
   currentEventName = eventName;
-  document.getElementById('selectedEvent').innerHTML = eventName;
+  document.getElementById('event').value = eventName;
 
   const transformThing = inflateFlatMap(
     transformationModule.defaultCategorizedEvents[eventName]['default']['$'][
@@ -257,8 +258,9 @@ function loadThisEvent(eventName) {
   );
 }
 
+
 function showTdr() {
-  const eventName = document.getElementById('selectedEvent').innerHTML;
+  const eventName = document.getElementById('event').value;
 
   const str = document.getElementById('bottom_left_textArea').value;
   let x = `trackEvent("${eventName}",${str}\n)`;
@@ -267,7 +269,9 @@ function showTdr() {
 }
 
 async function sendIt() {
-  const eventName = document.getElementById('selectedEvent').innerHTML;
+  const eventName = document.getElementById('event').value;
+
+  // finch
   try {
     const x = JSON.parse(document.getElementById('bottom_left_textArea').value);
     const theResult = await MwaAnalytics.trackEvent(eventName, x);
@@ -327,3 +331,59 @@ async function sendIt() {
     document.getElementById('bottom_right_textArea').value = boom;
   }
 }
+///////////////////// NEW LOGIC //////////////
+function log(msg) {
+  if (typeof msg === "object") {
+      console.log("%c" + JSON.stringify(msg), MAIN_LOG_COLOR)
+  } else {
+      console.log("%c" + msg, MAIN_LOG_COLOR)
+  }
+}
+
+function populateDropdown() {
+  log("populateDropdown: key=" + LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
+
+  const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
+  const events = JSON.parse(rawString)
+  let keys = Object.keys(events)
+  keys = keys.sort()
+  const newOptionsData = []
+  keys.forEach((key) => {
+      newOptionsData.push({ value: key, text: key })
+  })
+  const dropdown = document.getElementById("definedEventsSelector");
+  dropdown.innerHTML = '';
+  newOptionsData.forEach(option => {
+      const { value, text } = option;
+      const optionElement = document.createElement("option");
+      optionElement.value = value;
+      optionElement.text = text;
+      dropdown.appendChild(optionElement);
+  });
+}
+function handleSelectChange() {
+  const dropdown = document.getElementById("definedEventsSelector");
+  const selectedIndex = dropdown.selectedIndex;
+  const selectedOption = dropdown.options[selectedIndex].value;
+  const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
+  const events = JSON.parse(rawString)
+  const event = events[selectedOption]
+  document.getElementById("title").value = selectedOption
+  document.getElementById("event").value = event.event
+  document.getElementById("creationDate").innerHTML = event.created
+  try {
+      document.getElementById("bottom_left_textArea").value = JSON.stringify(event.json, null, 2)
+      giveHumanSomeHappyFeedBack
+  } catch (ignore_because_it_might_not_be_json) {
+      document.getElementById("bottom_left_textArea").value = event.json
+  }
+}
+function giveHumanSomeHappyFeedBack() {
+  const node = document.getElementById("feedback");
+  node.style.backgroundColor = "lightgreen";
+  setTimeout(() => {
+      node.style.backgroundColor = ""
+  }, 500);
+}
+
+populateDropdown()

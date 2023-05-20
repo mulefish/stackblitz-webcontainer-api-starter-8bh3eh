@@ -2,20 +2,35 @@
         min-width: 110%;
         background-color: #e0e0e0;
       }
+      /* #core_table {
+        width:100%;
+      }
+      #left_td {
+        width:400px;
+      }
+      #right_td {
+        width:400px;
+      }
 
       #bottom_left_textArea {
         display: inline-block;
-        min-width: 39%;
-        height: 100vh;
       }
       #bottom_right_textArea {
-        display: inline-block;
-        min-width: 59%;
-        height: 100vh;
+        background-color: lightyellow;
+         display: inline-block; 
+      } 
+      */
+      #bottom_left_textArea {
+        width:600px;
+        height:500px;
+      }
+      #bottom_right_textArea {
+        width:700px;
+        height:600px;
       }
 
       .meta {
-        background-color: lightyellow;
+        background-color: red;
       }
       #showThis {
         display: block;
