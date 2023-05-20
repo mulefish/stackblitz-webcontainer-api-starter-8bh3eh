@@ -28,7 +28,7 @@ function getPrettyDate() {
 
 }
 
-const defaults = {
+const default_events = {
     "app-response": {
         event: "app-response",
         created: getPrettyDate(),
@@ -43,7 +43,7 @@ const defaults = {
     },
     "error": {
         event: "error",
-        create: getPrettyDate(),
+        created: getPrettyDate(),
         json: {
             "error": {
                 "errorMessage": "string",
@@ -54,7 +54,7 @@ const defaults = {
     },
     "general-component-event": {
         event: "general-component-event",
-        create: getPrettyDate(),
+        created: getPrettyDate(),
         json: {
             "component": {
                 "id": "string",
@@ -65,7 +65,7 @@ const defaults = {
     },
     "page-products-displayed": {
         event: "page-products-displayed",
-        create: getPrettyDate(),
+        created: getPrettyDate(),
         json: {
             "collectionList": [
                 {
@@ -102,5 +102,6 @@ const defaults = {
         }
     }
 }
-
-export { getPrettyDate };
+// COMMENT IN FOR TDD! 
+// COMMENT OUT FOR WEB! 
+export { getPrettyDate, default_events };
