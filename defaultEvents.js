@@ -1,31 +1,14 @@
+const LOG_COLOR = "background:lightblue"
 function getPrettyDate() {
-    const d = new Date()
-    const yyyy = d.getFullYear()
-    let mm = 1 + d.getMonth()
-    if (mm < 10) {
-        mm = "0" + mm
-    }
-    let day = d.getDate()
-    if (day < 10) {
-        day = "0" + day
-    }
-
-    let hour = d.getHours()
-    hour -= 12
-    if (hour < 10) {
-        hour = "0" + hour
-    }
-    let minute = d.getHours()
-    if (minute < 10) {
-        minute = "0" + minute
-    }
-    let second = d.getHours()
-    if (second < 10) {
-        second = "0" + second
-    }
-    const yyyymmdd_hhmmss = yyyy + "/" + mm + "/" + day + " " + hour + ":" + minute + ":" + second
-    return yyyymmdd_hhmmss
-
+    const date = new Date()
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const hours = String(date.getHours()).padStart(2, "0");
+    const minutes = String(date.getMinutes()).padStart(2, "0");
+    const seconds = String(date.getSeconds()).padStart(2, "0");
+  
+    return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
 }
 
 const default_events = {
@@ -123,6 +106,26 @@ const default_events = {
         json: {
             "orderId": "string"
         }
+    },
+    "kittycats": {
+        event: "test",
+        created: getPrettyDate(),
+        json: {
+            "this_is_not_real": "string",
+            "random_to_check_for_livelyness": Math.random()
+        }
+    }
+}
+/* This will happen as soon as the page is loaded */
+function setUpLocalstorage_and_tellChildWhatTheKeyIs() {
+    const theLocalStoreage = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY);
+    if (theLocalStoreage === null) {
+        console.log(`%c creating ${LOCAL_STORAGE_GLOBAL_EVENTS_KEY}`, LOG_COLOR)
+        localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(default_events));
+    } else {
+        const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
+        const events = JSON.parse(rawString)
+        const keys = Object.keys(events)
     }
 }
 // COMMENT IN FOR TDD! 

@@ -1,38 +1,48 @@
 <style>
-    #eventNote {
-        width: 900px;
+    #eventJson {
+        width: 850px;
         height: 500px;
     }
 
-    #title {
+    .inputs {
         width: 95%;
     }
+
+    #definedEventsSelector {
+        width: 300px;
+    }
+
+    .note {
+        font-size: small;
+    }
 </style>
+<script>
+    const MODAL_LOG_COLOR = "background:lightyellow"
+</script>
 <table border="1">
     <tr>
         <td valign="top">
             <table border="1">
-
                 <tr>
-                    <td>Title</td>
-                    <td><input type="text" id="title" value=""></td>
+                    <td><b>Title</b></td>
+                    <td><input class="inputs" type="text" id="title" value=""></td>
                 </tr>
                 <tr>
-                    <td>Creation Date</td>
+                    <td><b>Creation Date</b></td>
                     <td id="creationDate"></td>
                 </tr>
                 <tr>
-                    <td>Event</td>
-                    <td>
-                        <div id="event"></div>
+                    <td><b>Event</b></td>
+                    <td><input class="inputs" type="text" id="event" value=""></td>
                 </tr>
                 <tr>
-                    <td colspan="2">Json</td>
+                    <td><b>Json</b></td>
+                    <td class="note">&nbsp;This does not have to be json - it could just be a note.</td>
                 </tr>
                 <tr>
                     <td colspan="2">
                         <!-- This will be the JSON for json but it could be a note - open ended! -->
-                        <textarea id="eventNote" value=""> </textarea>
+                        <textarea id="eventJson" value=""> </textarea>
                     </td>
                 </tr>
 
@@ -44,27 +54,28 @@
             </table>
         </td>
         <td valign="top">
-
-            <select size="10">
-                <option>app-response</option>
-                <option>error</option>
-                <option>general-component-event</option>
-                <option>page-products-displayed</option>
-                <option>page-view</option>
-                <option>product-interaction</option>
-                <option>purchase</option>
-
+            <!-- Dynamically populated with the below populateDropdown() func -->
+            <select size="10" id="definedEventsSelector" onchange="handleSelectChange()">
             </select>
 
             <script>
+                let LOCAL_STORAGE_GLOBAL_EVENTS_KEY = undefined
                 window.addEventListener("message", gotMessageFromParent, false);
                 function gotMessageFromParent(event) {
-                    const msg = "Mother says:\n" + JSON.stringify(event.data) 
-                    console.log("%c" + msg, "background:yellow");
+                    const command = event.data
+                    if (command.verb === "setLocalstorageKey") {
+                        LOCAL_STORAGE_GLOBAL_EVENTS_KEY = command.noun
+
+                        populateDropdown()
+
+
+
+
+                    }
                 }
                 function sendMessage() {
                     try {
-                        console.log("%c sendMessage ", "background:yellow")
+                        console.log("%c sendMessage ", MODAL_LOG_COLOR)
                         window.parent.postMessage("Hello from the child page!", "*");
                     } catch (boom) {
                         console.error(boom)
@@ -73,5 +84,57 @@
             </script>
             <button onclick="sendMessage()">sendMessage! </button>
 
+
+
+
+
         </td>
     </tr>
+
+    <script>
+        function populateDropdown() {
+            console.log("%c KEY=" + LOCAL_STORAGE_GLOBAL_EVENTS_KEY, MODAL_LOG_COLOR)
+
+            const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
+            const events = JSON.parse(rawString)
+            let keys = Object.keys(events)
+            keys = keys.sort()
+            const newOptionsData = []
+            keys.forEach((key)=> {
+                newOptionsData.push({value:key, text:key})
+            })
+            const dropdown = document.getElementById("definedEventsSelector");
+            dropdown.innerHTML = '';
+            newOptionsData.forEach(option => {
+                const { value, text } = option;
+                const optionElement = document.createElement("option");
+                optionElement.value = value;
+                optionElement.text = text;
+                dropdown.appendChild(optionElement);
+            });
+        }
+        function handleSelectChange() { 
+            const dropdown = document.getElementById("definedEventsSelector");
+            const selectedIndex = dropdown.selectedIndex;
+            const selectedOption = dropdown.options[selectedIndex].value;
+            const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
+            const events = JSON.parse(rawString)
+            const event = events[selectedOption]
+            console.log("Event iss " + JSON.stringify(event) )
+
+            document.getElementById("title").value=selectedOption
+            document.getElementById("event").value=event.event
+            document.getElementById("creationDate").innerHTML=event.created
+            try { 
+                document.getElementById("eventJson").value= JSON.stringify(event.json,null, 2) 
+            } catch ( ignore_because_it_might_not_be_json) {
+                document.getElementById("eventJson").value=event.json
+
+            }
+
+            
+
+
+        }
+
+    </script>

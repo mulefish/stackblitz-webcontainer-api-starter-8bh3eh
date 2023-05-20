@@ -3,7 +3,9 @@
   <head>
     <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
     <link rel="stylesheet" href="style.css">
-
+    <script>
+      const LOCAL_STORAGE_GLOBAL_EVENTS_KEY = "thisKeyIsForLocalStorage"
+    </script>
 
 
 
@@ -20,6 +22,7 @@
           `${host}lam-model/${version}/lam-model-remoteEntry.js?time=${now}`,
           `${host}experiment-module/${version}/experiment-module-remoteEntry.js?time=${now}`,
           `${host}%40lululemon/mwa-analytics/latest/browser/mwa-analytics.js?time=${now}`,
+          `defaultEvents.js`,
           `version5.js`,
           `memory.js`
         ];

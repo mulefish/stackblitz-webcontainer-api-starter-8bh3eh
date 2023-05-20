@@ -1,3 +1,5 @@
+/* It would be OK to delete this file */ 
+
 import { getPrettyDate, default_events } from './defaultEvents.js';
 function verdict(a, b, msg) {
     let pf = "FAIL"
@@ -9,6 +11,7 @@ function verdict(a, b, msg) {
     console.log(`${pf} ${msg}`)
     return isOk
 }
+
 
 /* Dates are hard : Do they fit the format? */
 function test_prettyDate() {
@@ -39,7 +42,7 @@ function test_default_events() {
 }
 /* are all the defaults present? */
 function test_all_the_defaults_are_there() {
-    let expected = ["app-response", "error", "general-component-event", "page-products-displayed", "page-view", "product-interaction", "purchase"]
+    let expected = ["kittycats", "app-response", "error", "general-component-event", "page-products-displayed", "page-view", "product-interaction", "purchase"]
     expected = expected.sort()
     let actual = Object.keys(default_events)
     actual = actual.sort()
