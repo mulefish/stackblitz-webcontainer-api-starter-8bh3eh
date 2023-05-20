@@ -12,8 +12,10 @@
         width: 300px;
     }
 
-    .note {
-        font-size: small;
+    #feedback {
+        margin: 15px;
+        width: 100px;
+        height: 20px;
     }
 </style>
 <script>
@@ -24,20 +26,20 @@
         <td valign="top">
             <table border="1">
                 <tr>
-                    <td><b>Title</b></td>
+                    <td align="right"><b>Title</b></td>
                     <td><input class="inputs" type="text" id="title" value=""></td>
                 </tr>
                 <tr>
-                    <td><b>Creation Date</b></td>
+                    <td align="right"><b>Creation Date</b></td>
                     <td id="creationDate"></td>
                 </tr>
                 <tr>
-                    <td><b>Event</b></td>
+                    <td align="right"><b>Event</b></td>
                     <td><input class="inputs" type="text" id="event" value=""></td>
                 </tr>
                 <tr>
-                    <td><b>Json</b></td>
-                    <td class="note">&nbsp;This does not have to be json - it could just be a note.</td>
+                    <td align="right"><b>Json</b></td>
+                    <td></td>
                 </tr>
                 <tr>
                     <td colspan="2">
@@ -46,10 +48,6 @@
                     </td>
                 </tr>
 
-                <tr>
-                    <td><button>save</button></td>
-                    <td><button>zap</button></td>
-                </tr>
 
             </table>
         </td>
@@ -65,24 +63,51 @@
                     const command = event.data
                     if (command.verb === "setLocalstorageKey") {
                         LOCAL_STORAGE_GLOBAL_EVENTS_KEY = command.noun
-
                         populateDropdown()
-
-
-
-
                     }
                 }
-                function sendMessage() {
+                function sendTDDMessage() {
+                    // This is NOT for the app. This is for TDD
                     try {
-                        console.log("%c sendMessage ", MODAL_LOG_COLOR)
-                        window.parent.postMessage("Hello from the child page!", "*");
+                        const msg = {
+                            verb: "checkLocalstorage",
+                            noun: LOCAL_STORAGE_GLOBAL_EVENTS_KEY
+                        }
+                        log(msg)
+                        window.parent.postMessage(msg, "*");
                     } catch (boom) {
                         console.error(boom)
                     }
                 }
+                function giveHumanSomeHappyFeedBack() {
+                    const node = document.getElementById("feedback");
+                    node.style.backgroundColor = "lightgreen";
+                    setTimeout(() => {
+                        node.style.backgroundColor = ""
+                    }, 500);
+                }
+                function giveHumanSomeSadFeedBack() {
+                    const node = document.getElementById("feedback");
+                    node.style.backgroundColor = "orange";
+                    setTimeout(() => {
+                        node.style.backgroundColor = "";
+                    }, 500);
+                }
+
             </script>
-            <button onclick="sendMessage()">sendMessage! </button>
+            <button onclick="clearModal()">clear</button>
+            <br />
+            <button onclick="beautify()">beautify</button>
+            <br />
+            <button onClick="save()">save</button>
+            <br />
+            <button onClick="removeSelectedOption_andZapFromLocalstorage()">delete selected</button>
+            <br />
+            <button onclick="checkLocalStorage()">checkLocalStorage</button>
+            <div id="feedback"></div>
+            <hr />
+            <button onclick="sendTDDMessage()">TDD</button>
+
 
 
 
@@ -92,16 +117,23 @@
     </tr>
 
     <script>
+        function log(msg) {
+            if (typeof msg === "object") {
+                console.log("%c" + JSON.stringify(msg), MODAL_LOG_COLOR)
+            } else {
+                console.log("%c" + msg, MODAL_LOG_COLOR)
+            }
+        }
         function populateDropdown() {
-            console.log("%c KEY=" + LOCAL_STORAGE_GLOBAL_EVENTS_KEY, MODAL_LOG_COLOR)
+            log("populateDropdown: key=" + LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
 
             const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
             const events = JSON.parse(rawString)
             let keys = Object.keys(events)
             keys = keys.sort()
             const newOptionsData = []
-            keys.forEach((key)=> {
-                newOptionsData.push({value:key, text:key})
+            keys.forEach((key) => {
+                newOptionsData.push({ value: key, text: key })
             })
             const dropdown = document.getElementById("definedEventsSelector");
             dropdown.innerHTML = '';
@@ -113,28 +145,150 @@
                 dropdown.appendChild(optionElement);
             });
         }
-        function handleSelectChange() { 
+        function handleSelectChange() {
             const dropdown = document.getElementById("definedEventsSelector");
             const selectedIndex = dropdown.selectedIndex;
             const selectedOption = dropdown.options[selectedIndex].value;
             const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
             const events = JSON.parse(rawString)
             const event = events[selectedOption]
-            console.log("Event iss " + JSON.stringify(event) )
-
-            document.getElementById("title").value=selectedOption
-            document.getElementById("event").value=event.event
-            document.getElementById("creationDate").innerHTML=event.created
-            try { 
-                document.getElementById("eventJson").value= JSON.stringify(event.json,null, 2) 
-            } catch ( ignore_because_it_might_not_be_json) {
-                document.getElementById("eventJson").value=event.json
-
+            document.getElementById("title").value = selectedOption
+            document.getElementById("event").value = event.event
+            document.getElementById("creationDate").innerHTML = event.created
+            try {
+                document.getElementById("eventJson").value = JSON.stringify(event.json, null, 2)
+                giveHumanSomeHappyFeedBack
+            } catch (ignore_because_it_might_not_be_json) {
+                document.getElementById("eventJson").value = event.json
             }
+        }
+        function removeSelectedOption_andZapFromLocalstorage() {
+            const dropdown = document.getElementById("definedEventsSelector");
+            const selectedIndex = dropdown.selectedIndex
+            if (selectedIndex < 0) {
+                alert("Nothing has been selected!")
+                giveHumanSomeSadFeedBack()
+            } else {
+                giveHumanSomeHappyFeedBack()
 
-            
-
-
+                // dropdown
+                const selectedOption = dropdown.options[selectedIndex].value
+                const optionToRemove = dropdown.querySelector(`option[value='${selectedOption}']`)
+                dropdown.removeChild(optionToRemove)
+                // modal
+                clearModal()
+                // localstorage
+                const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
+                const events = JSON.parse(rawString)
+                delete events[selectedOption];
+                localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(events));
+                // 
+                log("removeSelectedOption_andZapFromLocalstorage: " + selectedOption)
+            }
         }
 
+        function clearModal() {
+            giveHumanSomeHappyFeedBack()
+
+            const dropdown = document.getElementById("definedEventsSelector");
+            dropdown.selectedIndex = -1;
+            document.getElementById("title").value = ""
+            document.getElementById("event").value = ""
+            document.getElementById("creationDate").innerHTML = ""
+            document.getElementById("eventJson").value = ""
+        }
+
+        function beautify() {
+            try {
+                giveHumanSomeHappyFeedBack()
+
+                const rawString = document.getElementById("eventJson").value
+                const pretty = JSON.parse(rawString)
+                document.getElementById("eventJson").value = JSON.stringify(pretty, null, 2)
+                return true
+            } catch (your_json_is_ugly) {
+                giveHumanSomeSadFeedBack()
+                alert("Your json is illformed:\n" + your_json_is_ugly.message)
+                return false
+            }
+        }
+
+        function checkLocalStorage() {
+            const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
+            const events = JSON.parse(rawString)
+            let keys = Object.keys(events)
+            keys = keys.sort()
+            const thisIsWhatWeHaveInLocalStorage = {}
+            keys.forEach((key) => {
+                const obj = events[key]
+                thisIsWhatWeHaveInLocalStorage[key] = {
+                    title: key,
+                    event: obj.event,
+                    // created: obj.created
+                    json: obj.json
+                }
+            })
+            clearModal()
+            document.getElementById("eventJson").value = JSON.stringify(thisIsWhatWeHaveInLocalStorage, null, 2)
+        }
+
+        function save() {
+            function getPrettyDate() {
+                const date = new Date()
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, "0");
+                const day = String(date.getDate()).padStart(2, "0");
+                const hours = String(date.getHours()).padStart(2, "0");
+                const minutes = String(date.getMinutes()).padStart(2, "0");
+                const seconds = String(date.getSeconds()).padStart(2, "0");
+
+                return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
+            }
+
+            function addNewThingIntoDroplist(title) {
+                const dropdown = document.getElementById("definedEventsSelector")
+                const newOption = document.createElement("option")
+                newOption.value = title
+                newOption.text = title
+                dropdown.appendChild(newOption)
+                newOption.selected = true
+            }
+
+            const wellFormedJson = document.getElementById("eventJson").value
+            if (beautify() === true) {
+                const mightBeGood = {
+                    title: document.getElementById("title").value,
+                    event: document.getElementById("event").value,
+                    created: getPrettyDate(),
+                    json: wellFormedJson
+                }
+                let isOk = true
+                const failures = []
+                for (let key in mightBeGood) {
+                    if (mightBeGood[key].length < 2) {
+                        failures.push(key)
+                        isOk = false
+                    }
+                }
+                if (isOk === false) {
+                    alert("You are missing fields\nNote: Need at least 1 char per field:\n" + JSON.stringify(failures))
+                } else {
+                    const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
+                    const events = JSON.parse(rawString)
+                    if (!events.hasOwnProperty(mightBeGood.title)) {
+                        addNewThingIntoDroplist(mightBeGood.title)
+                    }
+
+                    events[mightBeGood.title] = {
+                        event: mightBeGood.event,
+                        created: mightBeGood.created,
+                        json: JSON.parse(mightBeGood.json)
+                    }
+
+
+                    giveHumanSomeHappyFeedBack()
+                    localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(events));
+                }
+            }
+        }
     </script>

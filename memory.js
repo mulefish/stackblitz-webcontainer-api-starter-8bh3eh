@@ -20,8 +20,21 @@ window.onclick = function (event) {
 }
 window.addEventListener("message", gotMessageFromIFrame, false);
 function gotMessageFromIFrame(event) {
-  const msg = "gotMessageFromIFrame:" +  event.data
-  console.log("%c " + msg , MEMORY_CONTROLLER_LOG_COLOR);
+    const command = event.data
+    console.log("VERB: " + command )
+    if (command.verb === "checkLocalstorage") {
+        const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
+        const events = JSON.parse(rawString)
+        console.log(JSON.stringify( events, null ,2 ))
+    } 
+
+    // } else {
+    //     const msg = "gotMessageFromIFrame:" +  event.data
+    //     console.log("%c " + JSON.stringify(msg), MEMORY_CONTROLLER_LOG_COLOR);              
+    // }
+
+
+
 }
 ////////////// FROM PARENT TO CHILD 
 const iframe = document.getElementById("modalContent");

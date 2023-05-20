@@ -112,7 +112,7 @@ const default_events = {
         created: getPrettyDate(),
         json: {
             "this_is_not_real": "string",
-            "random_to_check_for_livelyness": Math.random()
+            "random_to_check_for_persistence(sic)": Math.random()
         }
     }
 }
@@ -120,14 +120,39 @@ const default_events = {
 function setUpLocalstorage_and_tellChildWhatTheKeyIs() {
     const theLocalStoreage = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY);
     if (theLocalStoreage === null) {
-        console.log(`%c creating ${LOCAL_STORAGE_GLOBAL_EVENTS_KEY}`, LOG_COLOR)
+        console.log(`%c CREATING ${LOCAL_STORAGE_GLOBAL_EVENTS_KEY}`, LOG_COLOR)
         localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(default_events));
     } else {
+        // TODO! SEE HERE!!!
+        // Not sure if SMART or DUMB to always keep these...  Or... 
+        // TODO: Talk with Shane and Dipali and Francis! 
+        // BEGIN MAYBE!
+        // GOAL: If a 'default has been zapped' put it back in. But if it has been changed then let it alone.
         const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
         const events = JSON.parse(rawString)
-        const keys = Object.keys(events)
+        let changed = 0 
+        for ( let key in default_events ) {
+            if ( ! events.hasOwnProperty(key)) {
+                // Put it back! 
+                events[key] = default_events[key]
+                changed++
+                console.log(`%c Adding back ${key} to factory settings`, LOG_COLOR)
+
+            } else {
+                // Keep it as is! Might be the same as the original. 
+                // Might be different! Whatever. As is. 
+            }
+        }
+        if ( changed > 0 ) {
+            console.log(`%c CHANGING ${LOCAL_STORAGE_GLOBAL_EVENTS_KEY}`, LOG_COLOR)
+            localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(default_events));
+        } else {
+            console.log(`%c NO CHANGE ${LOCAL_STORAGE_GLOBAL_EVENTS_KEY}`, LOG_COLOR)
+        }
     }
 }
-// COMMENT IN FOR TDD! 
-// COMMENT OUT FOR WEB! 
-export { getPrettyDate, default_events };
+// COMMENT OUT FOR TDD! 
+//export { getPrettyDate, default_events };
+// COMMENT IN FOR WEB! 
+setUpLocalstorage_and_tellChildWhatTheKeyIs()
+
