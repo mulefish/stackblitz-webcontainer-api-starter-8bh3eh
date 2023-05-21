@@ -1,7 +1,7 @@
 # A Facilitated TDR Creation mechanism!
 Yay!
 
-# repo
+# Repo
 https://github.com/mulefish/stackblitz-webcontainer-api-starter-8bh3eh
 
 # stackblitz-webcontainer-api-starter-8bh3eh
@@ -39,7 +39,7 @@ A kittycat event? Clearly that is a fail
 ![a_kittycat_is_not_an_event_fail](a_kittycat_is_not_an_event_fail.png)
 Incorrect type is a fail
 ![a_wrong_type_fail](a_wrong_type_fail.png)
-Incorrect type is a fail
+Pointless field which would not actually hurt anything is a fail
 ![a_wrongly_added_field_fail](a_wrongly_added_field_fail.png)
 
 CRUD in action!
