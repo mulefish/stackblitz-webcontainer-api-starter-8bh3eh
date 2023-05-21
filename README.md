@@ -1,5 +1,7 @@
-# stackblitz-webcontainer-api-starter-8bh3eh
+# repo
+https://github.com/mulefish/stackblitz-webcontainer-api-starter-8bh3eh
 
+# stackblitz-webcontainer-api-starter-8bh3eh
 [Edit on StackBlitz ⚡️](https://stackblitz.com/edit/stackblitz-webcontainer-api-starter-8bh3eh)
 
 # Running from localhost? 
@@ -28,10 +30,18 @@ TL:DR: If a 'default has been zapped' put it back in. But if it has been changed
 Good idea or bad?
 
 # screen caps
+Happy!
 ![a_happy_pass](a_happy_pass.png)
+A kittycat event? Clearly that is a fail
 ![a_kittycat_is_not_an_event_fail](a_kittycat_is_not_an_event_fail.png)
-![a_new_event_crud_pic](a_new_event_crud_pic.png)
+Incorrect type is a fail
 ![a_wrong_type_fail](a_wrong_type_fail.png)
+Incorrect type is a fail
+![a_wrongly_added_field_fail](a_wrongly_added_field_fail.png)
+
+CRUD in action!
+![a_new_event_crud_pic](a_new_event_crud_pic.png)
+
 
 
 # TODO
