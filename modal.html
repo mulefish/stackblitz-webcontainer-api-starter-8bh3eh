@@ -1,5 +1,7 @@
+<script src="common.js"></script>
+
 <style>
-    #eventJson {
+    #editableJsonTextarea {
         width: 850px;
         height: 500px;
     }
@@ -43,62 +45,15 @@
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <!-- This will be the JSON for json but it could be a note - open ended! -->
-                        <textarea id="eventJson" value=""> </textarea>
+                        <textarea id="editableJsonTextarea" value=""> </textarea>
                     </td>
                 </tr>
-
-
             </table>
         </td>
         <td valign="top">
             <!-- Dynamically populated with the below populateDropdown() func -->
             <select size="20" id="definedEventsSelector" onchange="handleSelectChange()">
             </select>
-
-            <script>
-                let LOCAL_STORAGE_GLOBAL_EVENTS_KEY = undefined
-                window.addEventListener("message", gotMessageFromParent, false);
-                function gotMessageFromParent(event) {
-                    const command = event.data
-                    if (command.verb === "setLocalstorageKey") {
-                        LOCAL_STORAGE_GLOBAL_EVENTS_KEY = command.noun
-                        populateDropdown()
-                    } else if ( command.verb === "updateUI") {
-                        populateDropdown()
-                    }
-                }
-                function sendMessageToParent(command) {
-                    // This is NOT for the app. This is for TDD
-                    try {
-                        if (command === "checkLocalstorage") {
-                            const msg = {
-                                verb: "checkLocalstorage",
-                                noun: LOCAL_STORAGE_GLOBAL_EVENTS_KEY
-                            }
-                            log(msg)
-                            window.parent.postMessage(msg, "*");
-                        } else if (command === "updateUI") {
-                            const msg = {
-                                verb: "updateUI",
-                                noun: LOCAL_STORAGE_GLOBAL_EVENTS_KEY
-                            }
-                            log(msg)
-                            window.parent.postMessage(msg, "*");
-                        }
-
-                    } catch (boom) {
-                        console.error(boom)
-                    }
-                }
-                function giveHumanSomeHappyFeedBack() {
-                    const node = document.getElementById("feedback");
-                    node.style.backgroundColor = "lightgreen";
-                    setTimeout(() => {
-                        node.style.backgroundColor = ""
-                    }, 500);
-                }
-            </script>
             <button onclick="clearModal()">clear</button>
             <br />
             <button onclick="beautify()">beautify</button>
@@ -111,14 +66,13 @@
             <div id="feedback"></div>
             <hr />
             <button onclick="sendMessageToParent('checkLocalstorage')">TDD</button>
-
-
-
-
-
-
         </td>
     </tr>
+    <!-- </table> -->
+    <!-- Ok - this is honestly a mystery to me. If I have a </table> here it will break
+    Clearly, something is unbalanced. 
+    But I do not see where. -->
+
 
     <script>
         function log(msg) {
@@ -128,6 +82,41 @@
                 console.log("%c" + msg, MODAL_LOG_COLOR)
             }
         }
+
+        let LOCAL_STORAGE_GLOBAL_EVENTS_KEY = undefined
+        window.addEventListener("message", gotMessageFromParent, false);
+        function gotMessageFromParent(event) {
+            const command = event.data
+            if (command.verb === "setLocalstorageKey") {
+                LOCAL_STORAGE_GLOBAL_EVENTS_KEY = command.noun
+                populateDropdown()
+            } else if (command.verb === "updateUI") {
+                populateDropdown()
+            }
+        }
+        function sendMessageToParent(command) {
+            try {
+                if (command === "checkLocalstorage") {
+                    // This is NOT for the app. This is for TDD
+                    const msg = {
+                        verb: "checkLocalstorage",
+                        noun: LOCAL_STORAGE_GLOBAL_EVENTS_KEY
+                    }
+                    window.parent.postMessage(msg, "*");
+                } else if (command === "updateUI") {
+                    // Something was added or deleted; Tell mother
+                    const msg = {
+                        verb: "updateUI",
+                        noun: LOCAL_STORAGE_GLOBAL_EVENTS_KEY
+                    }
+                    window.parent.postMessage(msg, "*");
+                }
+
+            } catch (boom) {
+                console.error(boom)
+            }
+        }
+
         function populateDropdown() {
             log("populateDropdown: key=" + LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
 
@@ -160,10 +149,10 @@
             document.getElementById("event").value = event.event
             document.getElementById("creationDate").innerHTML = event.created
             try {
-                document.getElementById("eventJson").value = JSON.stringify(event.json, null, 2)
+                document.getElementById("editableJsonTextarea").value = JSON.stringify(event.json, null, 2)
                 giveHumanSomeHappyFeedBack
             } catch (ignore_because_it_might_not_be_json) {
-                document.getElementById("eventJson").value = event.json
+                document.getElementById("editableJsonTextarea").value = event.json
             }
         }
         function removeSelectedOption_andZapFromLocalstorage() {
@@ -199,21 +188,7 @@
             document.getElementById("title").value = ""
             document.getElementById("event").value = ""
             document.getElementById("creationDate").innerHTML = ""
-            document.getElementById("eventJson").value = ""
-        }
-
-        function beautify() {
-            try {
-                giveHumanSomeHappyFeedBack()
-
-                const rawString = document.getElementById("eventJson").value
-                const pretty = JSON.parse(rawString)
-                document.getElementById("eventJson").value = JSON.stringify(pretty, null, 2)
-                return true
-            } catch (your_json_is_ugly) {
-                alert("Your json is illformed\nOr it is empty\n---------\n" + your_json_is_ugly.message)
-                return false
-            }
+            document.getElementById("editableJsonTextarea").value = ""
         }
 
         function checkLocalStorage() {
@@ -232,22 +207,10 @@
                 }
             })
             clearModal()
-            document.getElementById("eventJson").value = JSON.stringify(thisIsWhatWeHaveInLocalStorage, null, 2)
+            document.getElementById("editableJsonTextarea").value = JSON.stringify(thisIsWhatWeHaveInLocalStorage, null, 2)
         }
 
         function save() {
-            function getPrettyDate() {
-                const date = new Date()
-                const year = date.getFullYear();
-                const month = String(date.getMonth() + 1).padStart(2, "0");
-                const day = String(date.getDate()).padStart(2, "0");
-                const hours = String(date.getHours()).padStart(2, "0");
-                const minutes = String(date.getMinutes()).padStart(2, "0");
-                const seconds = String(date.getSeconds()).padStart(2, "0");
-
-                return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
-            }
-
             function addNewThingIntoDroplist(title) {
                 const dropdown = document.getElementById("definedEventsSelector")
                 const newOption = document.createElement("option")
@@ -267,7 +230,7 @@
                     }
                 }
             }
-            const wellFormedJson = document.getElementById("eventJson").value
+            const wellFormedJson = document.getElementById("editableJsonTextarea").value
             if (beautify() === true) {
                 const mightBeGood = {
                     title: document.getElementById("title").value,

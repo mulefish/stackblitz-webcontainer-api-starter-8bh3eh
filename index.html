@@ -2,13 +2,12 @@
 <html>
 
 <head>
+  <script src="common.js"></script>
   <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
   <link rel="stylesheet" href="style.css">
   <script>
     const LOCAL_STORAGE_GLOBAL_EVENTS_KEY = "thisKeyIsForLocalStorage"
   </script>
-
-
 
   <script>
     async function getDynamicaSrc() {
@@ -63,14 +62,12 @@
     <button onClick="launchModal()" class="meta">Memory</button>
     &nbsp;<span id="statusOfTheSend">&nbsp;</span>
 
-
+    <!-- TODO: Get rid of 'buttons' - this is a left-over idea. First, talk w/ Shane and Francis -->
     <div id="buttons"></div>
 
 
     <div id="myModal" class="modal">
-      <!-- Modal content -->
       <div class="modal-content">
-        <!-- <div onClick="closeModal()" class="close">&times;!</div> -->
         <iframe id='modalContent' src="modal.html"></iframe>
       </div>
     </div>
@@ -103,36 +100,33 @@
                     <td><button onClick="beautify()" class="meta">Beautify</button></td>
                   </tr>
                   <tr>
-                    <td><button onClick="sendIt()" class="meta"><h3>Send</h3></button></td>
+                    <td><button onClick="sendIt()" class="meta">
+                        <h3>Send</h3>
+                      </button></td>
 
                   </tr>
-                
-                  </tr>
-                  <tr>
-                    <td colspan="2">
-                      <div id="feedback"></div>
-                    </td>
-                  </tr>
-                </table>
 
+            </tr>
+            <tr>
+              <td colspan="2">
+                <div id="feedback"></div>
               </td>
             </tr>
           </table>
 
-
-
-
-
-
-
-          <hr>
-          <textarea id="bottom_left_textArea" spellcheck="false"></textarea>
-        </td>
-        <td id="right_td" valign="top">
-          <textarea id="bottom_right_textArea" spellcheck="false"></textarea>
-
         </td>
       </tr>
+    </table>
+
+
+    <hr>
+    <textarea id="editableJsonTextarea" spellcheck="false"></textarea>
+    </td>
+    <td id="right_td" valign="top">
+      <textarea id="bottom_right_textArea" spellcheck="false"></textarea>
+
+    </td>
+    </tr>
     </table>
   </div>
   <script>
@@ -238,7 +232,7 @@
         const eventsFromLocalStorage = JSON.parse(rawString)
 
         let buttons = '';
-        let added = 0 
+        let added = 0
         namedEvents.forEach((event) => {
           buttons += `<button onClick='loadThisEvent("${event}")'>${event}</button>`;
           if (!eventsFromLocalStorage.hasOwnProperty(event)) {
@@ -253,8 +247,9 @@
             added++
           }
         });
-        if ( added > 0 ) {
+        if (added > 0) {
           localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(eventsFromLocalStorage));
+          populateDropdown()
         }
         document.getElementById('buttons').innerHTML = buttons;
       } catch (boom) {

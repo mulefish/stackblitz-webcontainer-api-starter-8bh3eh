@@ -1,79 +1,61 @@
-      #buttons {
-        min-width: 110%;
-        background-color: #e0e0e0;
-      }
-      .inputs {
-        width: 300px;
-      } 
+#buttons {
+  min-width: 110%;
+  background-color: #e0e0e0;
+}
 
-      #feedback {
-        margin: 15px;
-        width: 100px;
-        height: 20px;
-      }
+.inputs {
+  width: 300px;
+}
 
+#feedback {
+  margin: 15px;
+  width: 100px;
+  height: 20px;
+}
 
-      #bottom_left_textArea {
-        width: 600px;
-        height: 500px;
-      }
+#editableJsonTextarea {
+  width: 600px;
+  height: 500px;
+}
 
-      #bottom_right_textArea {
-        width: 700px;
-        height: 900px;
-      }
+#bottom_right_textArea {
+  width: 700px;
+  height: 900px;
+}
 
-      .meta {
-        background-color: cyan;
-      }
+.meta {
+  background-color: cyan;
+}
 
-      #showThis {
-        display: block;
-      }
+#showThis {
+  display: block;
+}
 
-      #hideThis {
-        display: none;
-      }
+#hideThis {
+  display: none;
+}
 
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 800px;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
 
+.modal-content {
+  background-color: #fefefe;
+  margin: 2% auto;
+  padding: 2px;
+  border: 1px solid #888;
+  width: 80%;
+}
 
-      /* Modal styles */
-      .modal {
-        display: none;
-        position: fixed;
-        z-index: 1;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 800px;
-        overflow: auto;
-        background-color: rgba(0, 0, 0, 0.4);
-      }
-
-      .modal-content {
-        background-color: #fefefe;
-        margin: 2% auto;
-        padding: 2px;
-        border: 1px solid #888;
-        width: 80%;
-      }
-
-      .close {
-        color: #aaa;
-        float: right;
-        font-size: 28px;
-        font-weight: bold;
-      }
-
-      .close:hover,
-      .close:focus {
-        color: black;
-        text-decoration: none;
-        cursor: pointer;
-      }
-
-      #modalContent {
-        width: 95%;
-        height: 700px;
-
-      }
+#modalContent {
+  width: 95%;
+  height: 700px;
+}

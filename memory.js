@@ -12,12 +12,12 @@ function launchModal() {
 function closeModal() {
     modal.style.display = "none";
 }
-///////////// FROM CHILD TO PARENT 
 window.onclick = function (event) {
     if (event.target == modal) {
         modal.style.display = "none";
     }
 }
+///////////// FROM CHILD TO PARENT 
 window.addEventListener("message", gotMessageFromIFrame, false);
 function gotMessageFromIFrame(event) {
     const command = event.data
@@ -30,8 +30,8 @@ function gotMessageFromIFrame(event) {
     } else {
         // FUN! Uncaught errors bubble up to here! Good to know!
         // Note: This will happen when a illformed SAVE is attempted in the modal
-        // Note note: This is not bad. Merely interesting.
-        console.log("Uncaught error! " + JSON.stringify( event.data))
+        // Note note: This is not bad; merely interesting: a happy accident.
+        console.log("Uncaught error! " + JSON.stringify(event.data))
     } 
 }
 ////////////// FROM PARENT TO CHILD 
@@ -44,4 +44,3 @@ function sendMessage(command) {
         console.error(boom)
     }
 }
-

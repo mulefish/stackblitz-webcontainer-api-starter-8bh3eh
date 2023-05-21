@@ -1,58 +1,20 @@
 const MAIN_LOG_COLOR = "background:lightblue"
 function flattenCategoricalOptionalityObjects() {
   const flat = flatten(everything);
-  // document.getElementById('event').value =
-  //   'Flat CategoricalOptionalityObjects';
   document.getElementById('bottom_right_textArea').value = JSON.stringify(
     flat,
     null,
     2
   );
-}
-
-let selectedView = 'schemaView';
-function setSelectedOption() {
-  selectedView = document.querySelector('input[name="option"]:checked').value;
 }
 
 function flattenTransformationModule_defaultCategorizedEvents() {
   const flat = flatten(transformationModule.defaultCategorizedEvents);
-  // document.getElementById('event').value =
-  //   'Flat TransformationModule';
   document.getElementById('bottom_right_textArea').value = JSON.stringify(
     flat,
     null,
     2
   );
-}
-// function beautify() {
-//   try {
-//     const x = document.getElementById('bottom_left_textArea').value;
-//     const obj = JSON.parse(x);
-//     document.getElementById('bottom_left_textArea').value = JSON.stringify(
-//       obj,
-//       null,
-//       2
-//     );
-//     console.log( obj)
-//     return true 
-//   } catch (boom) {
-//     alert(boom);
-//     return false 
-//   }
-// }
-function beautify() {
-  try {
-      giveHumanSomeHappyFeedBack()
-
-      const rawString = document.getElementById("bottom_left_textArea").value
-      const pretty = JSON.parse(rawString)
-      document.getElementById("bottom_left_textArea").value = JSON.stringify(pretty, null, 2)
-      return true
-  } catch (your_json_is_ugly) {
-      alert("Your json is illformed\nOr it is empty!\n---------\n" + your_json_is_ugly.message)
-      return false
-  }
 }
 
 function inflateFlatMap(simple) {
@@ -86,7 +48,7 @@ function createObjectToSend(event) {
 
 function setStore() {
   giveHumanSomeHappyFeedBack()
-  const x = document.getElementById('bottom_left_textArea').value;
+  const x = document.getElementById('editableJsonTextarea').value;
   localStorage.setItem('register1', x);
 }
 
@@ -95,13 +57,13 @@ function getStore() {
   const x = localStorage.getItem('register1');
   try {
     const obj = JSON.parse(x);
-    document.getElementById('bottom_left_textArea').value = JSON.stringify(
+    document.getElementById('editableJsonTextarea').value = JSON.stringify(
       obj,
       null,
       2
     );
   } catch (ohno_bad_json) {
-    document.getElementById('bottom_left_textArea').value = x;
+    document.getElementById('editableJsonTextarea').value = x;
   }
 }
 
@@ -148,7 +110,7 @@ function upperCasify(aryOfStrings) {
   return result;
 }
 function superExpensiveMatch(flat_everything, array_of_almost_keys) {
-  // Yes! This is crazy 'expensive'. But it is only 1 millisecond!
+  // Yes! This is crazy 'expensive'. But it is only 1 millisecond! So...
   let result = {};
   for (let keyWhichMightHaveQuestionMarks in flat_everything) {
     const candidate = keyWhichMightHaveQuestionMarks.replace(/\?/g, '');
@@ -162,8 +124,8 @@ function superExpensiveMatch(flat_everything, array_of_almost_keys) {
 }
 
 function makeItRightShape(map, eventName) {
-  // THESE FUNC = I lost.
-
+  // TODO: Talk with Shane and then remove this func.
+  // This is part of the older 'everything automatic' idea
   if (eventName === 'error') {
     let errorObj = { error: {} };
     for (let k in map['EVENT']['attributes']) {
@@ -228,13 +190,8 @@ function makeItRightShape(map, eventName) {
   }
 }
 
-function loadDefaultsIntoLocalStorageIfNeeded() {
-
-
-
-
-
-}
+// function loadDefaultsIntoLocalStorageIfNeeded() {
+// }
 
 function getThisEvent(eventName) {
   const flat_everything = flatten(everything);
@@ -249,6 +206,9 @@ function getThisEvent(eventName) {
   const found = superExpensiveMatch(flat_everything, keys);
   const inflatedThing = inflateFlatMap(found);
   return inflatedThing
+
+  // TODO: Talk with Shane and then remove the below.
+  // This is part of the older 'everything automatic' idea
   //const whatToSend = makeItRightShape(inflatedThing, eventName);
   //return whatToSend
   /* 
@@ -269,7 +229,7 @@ function getThisEvent(eventName) {
     2
   );
 
-  document.getElementById('bottom_left_textArea').value = JSON.stringify(
+  document.getElementById('editableJsonTextarea').value = JSON.stringify(
     whatToSend,
     null,
     2
@@ -312,7 +272,7 @@ function loadThisEvent(eventName) {
     2
   );
 
-  document.getElementById('bottom_left_textArea').value = JSON.stringify(
+  document.getElementById('editableJsonTextarea').value = JSON.stringify(
     whatToSend,
     null,
     2
@@ -323,7 +283,7 @@ function loadThisEvent(eventName) {
 function showTdr() {
   const eventName = document.getElementById('event').value;
 
-  const str = document.getElementById('bottom_left_textArea').value;
+  const str = document.getElementById('editableJsonTextarea').value;
   let x = `trackEvent("${eventName}",${str}\n)`;
 
   document.getElementById('bottom_right_textArea').value = x;
@@ -336,7 +296,7 @@ async function sendIt() {
 
 
   try {
-    const x = JSON.parse(document.getElementById('bottom_left_textArea').value);
+    const x = JSON.parse(document.getElementById('editableJsonTextarea').value);
     const theResult = await MwaAnalytics.trackEvent(eventName, x);
     const base = theResult['payload']['properties'];
     thePayload =
@@ -355,7 +315,7 @@ async function sendIt() {
     }
 
     const whatGotSent = JSON.parse(
-      document.getElementById('bottom_left_textArea').value
+      document.getElementById('editableJsonTextarea').value
     );
     const flat_whatGotSent = flatten(whatGotSent);
     let simple = {};
@@ -389,13 +349,13 @@ async function sendIt() {
         'cyan';
     }
   } catch (boom) {
-    const msg = "FAILBOT!\n--------------------\nSome needed field is missing\n" + boom.message 
+    const msg = "FAILBOT!\n--------------------\nMaybe some needed field is missing\nMaybe the event is wrong\n--------------------\n" + boom.message
     document.getElementById('bottom_right_textArea').value = msg
     document.getElementById('statusOfTheSend').innerHTML = ' SUBMIT FAIL';
     document.getElementById('statusOfTheSend').style.backgroundColor = 'red';
   }
 }
-///////////////////// NEW LOGIC //////////////
+
 function log(msg) {
   if (typeof msg === "object") {
     console.log("%c" + JSON.stringify(msg), MAIN_LOG_COLOR)
@@ -405,8 +365,6 @@ function log(msg) {
 }
 
 function populateDropdown() {
-  log("populateDropdown: key=" + LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
-
   const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
   const events = JSON.parse(rawString)
   let keys = Object.keys(events)
@@ -428,8 +386,6 @@ function populateDropdown() {
 function handleSelectChange() {
   document.getElementById('statusOfTheSend').innerHTML = '';
   document.getElementById('statusOfTheSend').style.backgroundColor = 'white';
-
-  // 
   const dropdown = document.getElementById("definedEventsSelector");
   const selectedIndex = dropdown.selectedIndex;
   const selectedOption = dropdown.options[selectedIndex].value;
@@ -440,17 +396,10 @@ function handleSelectChange() {
   document.getElementById("event").value = event.event
   document.getElementById("creationDate").innerHTML = event.created
   try {
-    document.getElementById("bottom_left_textArea").value = JSON.stringify(event.json, null, 2)
+    document.getElementById("editableJsonTextarea").value = JSON.stringify(event.json, null, 2)
   } catch (ignore_because_it_might_not_be_json) {
-    document.getElementById("bottom_left_textArea").value = event.json
+    document.getElementById("editableJsonTextarea").value = event.json
   }
-}
-function giveHumanSomeHappyFeedBack() {
-  const node = document.getElementById("feedback");
-  node.style.backgroundColor = "lightgreen";
-  setTimeout(() => {
-    node.style.backgroundColor = ""
-  }, 500);
 }
 
 function addNewThingIntoDroplist(title) {
@@ -462,18 +411,6 @@ function addNewThingIntoDroplist(title) {
 }
 
 function save() {
-
-  function getPrettyDate() {
-    const date = new Date()
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    const hours = String(date.getHours()).padStart(2, "0");
-    const minutes = String(date.getMinutes()).padStart(2, "0");
-    const seconds = String(date.getSeconds()).padStart(2, "0");
-
-    return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`
-  }
 
   function addNewThingIntoDroplist(title) {
     const dropdown = document.getElementById("definedEventsSelector")
@@ -494,53 +431,46 @@ function save() {
       }
     }
   }
-try { 
-  const wellFormedJson = document.getElementById("bottom_left_textArea").value
-
-  
-
-  if (beautify() === true) {
-
-
-
-    const mightBeGood = {
-      title: document.getElementById("title").value,
-      event: document.getElementById("event").value,
-      created: getPrettyDate(),
-      json: wellFormedJson
-    }
-    let isOk = true
-    const failures = []
-    for (let key in mightBeGood) {
-      if (mightBeGood[key].length < 2) {
-        failures.push(key)
-        isOk = false
+  try {
+    const wellFormedJson = document.getElementById("editableJsonTextarea").value
+    if (beautify() === true) {
+      const mightBeGood = {
+        title: document.getElementById("title").value,
+        event: document.getElementById("event").value,
+        created: getPrettyDate(),
+        json: wellFormedJson
       }
-    }
-    if (isOk === false) {
-      alert("You are missing fields\nNote: Need at least 1 char per field:\n" + JSON.stringify(failures))
-    } else {
-      const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
-      const events = JSON.parse(rawString)
-      if (!events.hasOwnProperty(mightBeGood.title)) {
-        addNewThingIntoDroplist(mightBeGood.title)
+      let isOk = true
+      const failures = []
+      for (let key in mightBeGood) {
+        if (mightBeGood[key].length < 2) {
+          failures.push(key)
+          isOk = false
+        }
+      }
+      if (isOk === false) {
+        alert("You are missing fields\nNote: Need at least 1 char per field:\n" + JSON.stringify(failures))
       } else {
-        setAsSelectedThisThing(mightBeGood.title)
-      }
+        const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
+        const events = JSON.parse(rawString)
+        if (!events.hasOwnProperty(mightBeGood.title)) {
+          addNewThingIntoDroplist(mightBeGood.title)
+        } else {
+          setAsSelectedThisThing(mightBeGood.title)
+        }
 
-      events[mightBeGood.title] = {
-        event: mightBeGood.event,
-        created: mightBeGood.created,
-        json: JSON.parse(mightBeGood.json)
+        events[mightBeGood.title] = {
+          event: mightBeGood.event,
+          created: mightBeGood.created,
+          json: JSON.parse(mightBeGood.json)
+        }
+        giveHumanSomeHappyFeedBack()
+        localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(events));
       }
-      giveHumanSomeHappyFeedBack()
-      localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(events));
     }
+  } catch (ouch) {
+    alert(ouch)
   }
-
-} catch (ouch) {
-  alert( ouch )
-}
 }
 
 populateDropdown()

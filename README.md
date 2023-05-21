@@ -1,5 +1,5 @@
 # A Facilitated TDR Creation mechanism!
-Yay!
+Yay! \0/
 
 # Repo
 https://github.com/mulefish/stackblitz-webcontainer-api-starter-8bh3eh
@@ -46,7 +46,6 @@ CRUD in action!
 ![a_new_event_crud_pic](a_new_event_crud_pic.png)
 
 
-
 # TODO
-- There are two files which were created at different times. Many of the functions overlap in purpose. Code shrinkage woud be a good thing. 
+- Many of the functions here overlap in purpose; Code shrinkage would be a good thing. 
 - The OLD button row is still at the top of the page ie 'app-response', 'error' etc etc: I want to show Shane something and then I will remove those. 
