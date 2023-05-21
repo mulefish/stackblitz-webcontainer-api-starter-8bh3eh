@@ -28,7 +28,7 @@ https://github.com/mulefish/stackblitz-webcontainer-api-starter-8bh3eh
 - Has fields and all the type are correct? This is a PASS!  
 
 # Question
-See comment and logic in 'defaultEvents.js' around the comment that starts with "// TODO! SEE HERE!!!" 
+See comment and logic in 'setupLocalstorage.js' around the comment that starts with "// TODO! SEE HERE!!!" 
 TL:DR: If a 'default has been zapped' put it back in. But if it has been changed then let it alone.  
 Good idea or bad?
 
