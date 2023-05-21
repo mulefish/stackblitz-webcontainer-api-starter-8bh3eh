@@ -32,7 +32,7 @@ See comment and logic in 'defaultEvents.js' around the comment that starts with 
 TL:DR: If a 'default has been zapped' put it back in. But if it has been changed then let it alone.  
 Good idea or bad?
 
-# screen caps
+# Screen caps
 Happy!
 ![a_happy_pass](a_happy_pass.png)
 A kittycat event? Clearly that is a fail
