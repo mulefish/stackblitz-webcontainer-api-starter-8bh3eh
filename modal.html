@@ -53,7 +53,7 @@
         </td>
         <td valign="top">
             <!-- Dynamically populated with the below populateDropdown() func -->
-            <select size="10" id="definedEventsSelector" onchange="handleSelectChange()">
+            <select size="20" id="definedEventsSelector" onchange="handleSelectChange()">
             </select>
 
             <script>
@@ -64,17 +64,29 @@
                     if (command.verb === "setLocalstorageKey") {
                         LOCAL_STORAGE_GLOBAL_EVENTS_KEY = command.noun
                         populateDropdown()
+                    } else if ( command.verb === "updateUI") {
+                        populateDropdown()
                     }
                 }
-                function sendTDDMessage() {
+                function sendMessageToParent(command) {
                     // This is NOT for the app. This is for TDD
                     try {
-                        const msg = {
-                            verb: "checkLocalstorage",
-                            noun: LOCAL_STORAGE_GLOBAL_EVENTS_KEY
+                        if (command === "checkLocalstorage") {
+                            const msg = {
+                                verb: "checkLocalstorage",
+                                noun: LOCAL_STORAGE_GLOBAL_EVENTS_KEY
+                            }
+                            log(msg)
+                            window.parent.postMessage(msg, "*");
+                        } else if (command === "updateUI") {
+                            const msg = {
+                                verb: "updateUI",
+                                noun: LOCAL_STORAGE_GLOBAL_EVENTS_KEY
+                            }
+                            log(msg)
+                            window.parent.postMessage(msg, "*");
                         }
-                        log(msg)
-                        window.parent.postMessage(msg, "*");
+
                     } catch (boom) {
                         console.error(boom)
                     }
@@ -98,7 +110,7 @@
             <button onclick="checkLocalStorage()">checkLocalStorage</button>
             <div id="feedback"></div>
             <hr />
-            <button onclick="sendTDDMessage()">TDD</button>
+            <button onclick="sendMessageToParent('checkLocalstorage')">TDD</button>
 
 
 
@@ -174,7 +186,8 @@
                 delete events[selectedOption];
                 localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(events));
                 // 
-                log("removeSelectedOption_andZapFromLocalstorage: " + selectedOption)
+                sendMessageToParent("updateUI")
+
             }
         }
 
@@ -288,6 +301,7 @@
                     }
                     giveHumanSomeHappyFeedBack()
                     localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(events));
+                    sendMessageToParent("updateUI")
                 }
             }
         }

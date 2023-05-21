@@ -2,6 +2,9 @@
         min-width: 110%;
         background-color: #e0e0e0;
       }
+      .inputs {
+        width: 300px;
+      } 
 
       #feedback {
         margin: 15px;
@@ -17,11 +20,11 @@
 
       #bottom_right_textArea {
         width: 700px;
-        height: 600px;
+        height: 900px;
       }
 
       .meta {
-        background-color: red;
+        background-color: cyan;
       }
 
       #showThis {

@@ -24,7 +24,9 @@ function gotMessageFromIFrame(event) {
     if (command.verb === "checkLocalstorage") {
         const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
         const events = JSON.parse(rawString)
-        console.log(JSON.stringify( events, null ,2 ))
+    } else if ( command.verb === "updateUI") {
+        log("gotMessageFromIFrame " + command.verb )
+        populateDropdown()
     } else {
         // FUN! Uncaught errors bubble up to here! Good to know!
         // Note: This will happen when a illformed SAVE is attempted in the modal

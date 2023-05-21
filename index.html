@@ -38,7 +38,7 @@
 
 <body>
   <div id="showThis">
-    <button onClick="loadGui()">Load gui</button>
+    <button onClick="loadGui()" class="meta">Load gui</button>
 
     <a
       href="https://stackblitz.com/edit/stackblitz-webcontainer-api-starter-47bkwn?file=README.md,index.html">stackblitz</a>
@@ -51,22 +51,16 @@
     <h3 id="seconds">0</h3>
   </div>
   <div id="hideThis">
-    <button onClick="sendIt()" class="meta">Send</button>
-    <button onClick="beautify()" class="meta">Beautify</button>
     <button onClick="flattenCategoricalOptionalityObjects()" class="meta">
       CategoricalOptionalityObjects
     </button>
     <button onClick="flattenTransformationModule_defaultCategorizedEvents()" class="meta">
       TransformationModule.defaultCategorizedEvents
     </button>
-    <button onClick="setStore()" class="meta">SetStore</button>
-    <button onClick="getStore()" class="meta">GetStore</button>
+    <button onClick="setStore()" class="meta">Set tmp</button>
+    <button onClick="getStore()" class="meta">Get tmp</button>
     <button onClick="showTdr()" class="meta">TDR</button>
     <button onClick="launchModal()" class="meta">Memory</button>
-    <button onClick="sendMessage()">sendMessage</button>
-
-    <!-- <button onClick="showPurchase()" class="meta">showPurchase</button>
-      <button onClick="showSearch()" class="meta">showSearch</button> -->
     &nbsp;<span id="statusOfTheSend">&nbsp;</span>
 
 
@@ -86,8 +80,8 @@
 
           <table border="1">
             <tr>
-              <td>
-                <select size="10" id="definedEventsSelector" onchange="handleSelectChange()">
+              <td valign="top">
+                <select size="14" id="definedEventsSelector" onchange="handleSelectChange()">
                 </select>
               </td>
               <td valign="top">
@@ -105,7 +99,14 @@
                     <td><input class="inputs" type="text" id="event" value=""></td>
                   </tr>
                   <tr>
-                    <td><button onClick="save()">save</button></td>
+                    <td><button onClick="save()" class="meta">save</button></td>
+                    <td><button onClick="beautify()" class="meta">Beautify</button></td>
+                  </tr>
+                  <tr>
+                    <td><button onClick="sendIt()" class="meta"><h3>Send</h3></button></td>
+
+                  </tr>
+                
                   </tr>
                   <tr>
                     <td colspan="2">
@@ -239,7 +240,6 @@
         let buttons = '';
         let added = 0 
         namedEvents.forEach((event) => {
-          // console.log( event )
           buttons += `<button onClick='loadThisEvent("${event}")'>${event}</button>`;
           if (!eventsFromLocalStorage.hasOwnProperty(event)) {
             const created = getPrettyDate()

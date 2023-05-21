@@ -1,8 +1,8 @@
 const MAIN_LOG_COLOR = "background:lightblue"
 function flattenCategoricalOptionalityObjects() {
   const flat = flatten(everything);
-  document.getElementById('event').value =
-    'Flat CategoricalOptionalityObjects';
+  // document.getElementById('event').value =
+  //   'Flat CategoricalOptionalityObjects';
   document.getElementById('bottom_right_textArea').value = JSON.stringify(
     flat,
     null,
@@ -17,8 +17,8 @@ function setSelectedOption() {
 
 function flattenTransformationModule_defaultCategorizedEvents() {
   const flat = flatten(transformationModule.defaultCategorizedEvents);
-  document.getElementById('event').value =
-    'Flat TransformationModule';
+  // document.getElementById('event').value =
+  //   'Flat TransformationModule';
   document.getElementById('bottom_right_textArea').value = JSON.stringify(
     flat,
     null,
@@ -85,11 +85,13 @@ function createObjectToSend(event) {
 }
 
 function setStore() {
+  giveHumanSomeHappyFeedBack()
   const x = document.getElementById('bottom_left_textArea').value;
   localStorage.setItem('register1', x);
 }
 
 function getStore() {
+  giveHumanSomeHappyFeedBack()
   const x = localStorage.getItem('register1');
   try {
     const obj = JSON.parse(x);
@@ -328,9 +330,11 @@ function showTdr() {
 }
 
 async function sendIt() {
+  document.getElementById('statusOfTheSend').innerHTML = '';
+  document.getElementById('statusOfTheSend').style.backgroundColor = 'white';
   const eventName = document.getElementById('event').value;
 
-  // finch
+
   try {
     const x = JSON.parse(document.getElementById('bottom_left_textArea').value);
     const theResult = await MwaAnalytics.trackEvent(eventName, x);
@@ -361,7 +365,6 @@ async function sendIt() {
       const k2 = pieces[pieces.length - 1];
       simple[k2] = v;
     }
-    console.log(simple);
 
     let isOk = [];
     for (let k in simple) {
@@ -377,17 +380,19 @@ async function sendIt() {
     }
     const allTrue = isOk.every((v) => v === true);
     if (allTrue === false) {
-      console.log('%c FAIL ', 'background:red');
-      document.getElementById('statusOfTheSend').innerHTML = 'FAIL';
+      document.getElementById('statusOfTheSend').innerHTML = ' SUBMIT FAIL';
       document.getElementById('statusOfTheSend').style.backgroundColor = 'red';
     } else {
-      console.log('%c PASS ', 'background:green');
-      document.getElementById('statusOfTheSend').innerHTML = 'PASS';
+      giveHumanSomeHappyFeedBack()
+      document.getElementById('statusOfTheSend').innerHTML = ' SUBMIT PASS';
       document.getElementById('statusOfTheSend').style.backgroundColor =
-        'green';
+        'cyan';
     }
   } catch (boom) {
-    document.getElementById('bottom_right_textArea').value = boom;
+    const msg = "FAILBOT!\n--------------------\nSome needed field is missing\n" + boom.message 
+    document.getElementById('bottom_right_textArea').value = msg
+    document.getElementById('statusOfTheSend').innerHTML = ' SUBMIT FAIL';
+    document.getElementById('statusOfTheSend').style.backgroundColor = 'red';
   }
 }
 ///////////////////// NEW LOGIC //////////////
@@ -421,6 +426,10 @@ function populateDropdown() {
   });
 }
 function handleSelectChange() {
+  document.getElementById('statusOfTheSend').innerHTML = '';
+  document.getElementById('statusOfTheSend').style.backgroundColor = 'white';
+
+  // 
   const dropdown = document.getElementById("definedEventsSelector");
   const selectedIndex = dropdown.selectedIndex;
   const selectedOption = dropdown.options[selectedIndex].value;
