@@ -63,8 +63,9 @@
     &nbsp;<span id="statusOfTheSend">&nbsp;</span>
 
     <!-- TODO: Get rid of 'buttons' - this is a left-over idea. First, talk w/ Shane and Francis -->
-    <div id="buttons"></div>
-
+    <!-- <div id="buttons"></div> -->
+    <!-- NOTE: There is likely some orphan functions in 'version5.js' now that I've disabled the 'buttons' idea.
+    But I am keeping that code in because that was the first pass at 100% automation. -->
 
     <div id="myModal" class="modal">
       <div class="modal-content">
@@ -231,10 +232,10 @@
         const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
         const eventsFromLocalStorage = JSON.parse(rawString)
 
-        let buttons = '';
+        // let buttons = '';
         let added = 0
         namedEvents.forEach((event) => {
-          buttons += `<button onClick='loadThisEvent("${event}")'>${event}</button>`;
+          // buttons += `<button onClick='loadThisEvent("${event}")'>${event}</button>`;
           if (!eventsFromLocalStorage.hasOwnProperty(event)) {
             const created = getPrettyDate()
             eventsFromLocalStorage[event] = {
@@ -251,7 +252,7 @@
           localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(eventsFromLocalStorage));
           populateDropdown()
         }
-        document.getElementById('buttons').innerHTML = buttons;
+        // document.getElementById('buttons').innerHTML = buttons;
       } catch (boom) {
         alert(boom);
         console.log(boom);
