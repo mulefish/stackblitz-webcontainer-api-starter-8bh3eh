@@ -1,4 +1,4 @@
-const MAIN_LOG_COLOR = "background:lightblue"
+const MAIN_LOG_COLOR = 'background:lightblue';
 function flattenCategoricalOptionalityObjects() {
   const flat = flatten(everything);
   document.getElementById('bottom_right_textArea').value = JSON.stringify(
@@ -47,13 +47,13 @@ function createObjectToSend(event) {
 }
 
 function setStore() {
-  giveHumanSomeHappyFeedBack()
+  giveHumanSomeHappyFeedBack();
   const x = document.getElementById('editableJsonTextarea').value;
   localStorage.setItem('register1', x);
 }
 
 function getStore() {
-  giveHumanSomeHappyFeedBack()
+  giveHumanSomeHappyFeedBack();
   const x = localStorage.getItem('register1');
   try {
     const obj = JSON.parse(x);
@@ -205,7 +205,7 @@ function getThisEvent(eventName) {
   keys = upperCasify(keys);
   const found = superExpensiveMatch(flat_everything, keys);
   const inflatedThing = inflateFlatMap(found);
-  return inflatedThing
+  return inflatedThing;
 
   // TODO: Talk with Shane and then remove the below.
   // This is part of the older 'everything automatic' idea
@@ -237,9 +237,6 @@ function getThisEvent(eventName) {
   */
 }
 
-
-
-
 function loadThisEvent(eventName) {
   document.getElementById('statusOfTheSend').innerHTML = '';
   document.getElementById('statusOfTheSend').style.backgroundColor = 'white';
@@ -262,7 +259,7 @@ function loadThisEvent(eventName) {
 
   const transformThing = inflateFlatMap(
     transformationModule.defaultCategorizedEvents[eventName]['default']['$'][
-    'payload'
+      'payload'
     ]
   );
   const flat_transformThing = flatten(transformThing);
@@ -279,12 +276,11 @@ function loadThisEvent(eventName) {
   );
 }
 
-
 function showTdr() {
   const eventName = document.getElementById('event').value;
 
   const str = document.getElementById('editableJsonTextarea').value;
-  let x = `trackEvent("${eventName}",${str}\n)`;
+  let x = `analytics.trackEvent("${eventName}",${str}\n)`;
 
   document.getElementById('bottom_right_textArea').value = x;
 }
@@ -293,7 +289,6 @@ async function sendIt() {
   document.getElementById('statusOfTheSend').innerHTML = '';
   document.getElementById('statusOfTheSend').style.backgroundColor = 'white';
   const eventName = document.getElementById('event').value;
-
 
   try {
     const x = JSON.parse(document.getElementById('editableJsonTextarea').value);
@@ -343,41 +338,42 @@ async function sendIt() {
       document.getElementById('statusOfTheSend').innerHTML = ' SUBMIT FAIL';
       document.getElementById('statusOfTheSend').style.backgroundColor = 'red';
     } else {
-      giveHumanSomeHappyFeedBack()
+      giveHumanSomeHappyFeedBack();
       document.getElementById('statusOfTheSend').innerHTML = ' SUBMIT PASS';
-      document.getElementById('statusOfTheSend').style.backgroundColor =
-        'cyan';
+      document.getElementById('statusOfTheSend').style.backgroundColor = 'cyan';
     }
   } catch (boom) {
-    const msg = "FAILBOT!\n--------------------\nMaybe some needed field is missing\nMaybe the event is wrong\n--------------------\n" + boom.message
-    document.getElementById('bottom_right_textArea').value = msg
+    const msg =
+      'FAILBOT!\n--------------------\nMaybe some needed field is missing\nMaybe the event is wrong\n--------------------\n' +
+      boom.message;
+    document.getElementById('bottom_right_textArea').value = msg;
     document.getElementById('statusOfTheSend').innerHTML = ' SUBMIT FAIL';
     document.getElementById('statusOfTheSend').style.backgroundColor = 'red';
   }
 }
 
 function log(msg) {
-  if (typeof msg === "object") {
-    console.log("%c" + JSON.stringify(msg), MAIN_LOG_COLOR)
+  if (typeof msg === 'object') {
+    console.log('%c' + JSON.stringify(msg), MAIN_LOG_COLOR);
   } else {
-    console.log("%c" + msg, MAIN_LOG_COLOR)
+    console.log('%c' + msg, MAIN_LOG_COLOR);
   }
 }
 
 function populateDropdown() {
-  const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
-  const events = JSON.parse(rawString)
-  let keys = Object.keys(events)
-  keys = keys.sort()
-  const newOptionsData = []
+  const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY);
+  const events = JSON.parse(rawString);
+  let keys = Object.keys(events);
+  keys = keys.sort();
+  const newOptionsData = [];
   keys.forEach((key) => {
-    newOptionsData.push({ value: key, text: key })
-  })
-  const dropdown = document.getElementById("definedEventsSelector");
+    newOptionsData.push({ value: key, text: key });
+  });
+  const dropdown = document.getElementById('definedEventsSelector');
   dropdown.innerHTML = '';
-  newOptionsData.forEach(option => {
+  newOptionsData.forEach((option) => {
     const { value, text } = option;
-    const optionElement = document.createElement("option");
+    const optionElement = document.createElement('option');
     optionElement.value = value;
     optionElement.text = text;
     dropdown.appendChild(optionElement);
@@ -386,43 +382,46 @@ function populateDropdown() {
 function handleSelectChange() {
   document.getElementById('statusOfTheSend').innerHTML = '';
   document.getElementById('statusOfTheSend').style.backgroundColor = 'white';
-  const dropdown = document.getElementById("definedEventsSelector");
+  const dropdown = document.getElementById('definedEventsSelector');
   const selectedIndex = dropdown.selectedIndex;
   const selectedOption = dropdown.options[selectedIndex].value;
-  const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
-  const events = JSON.parse(rawString)
-  const event = events[selectedOption]
-  document.getElementById("title").value = selectedOption
-  document.getElementById("event").value = event.event
-  document.getElementById("creationDate").innerHTML = event.created
+  const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY);
+  const events = JSON.parse(rawString);
+  const event = events[selectedOption];
+  document.getElementById('title').value = selectedOption;
+  document.getElementById('event').value = event.event;
+  document.getElementById('creationDate').innerHTML = event.created;
   try {
-    document.getElementById("editableJsonTextarea").value = JSON.stringify(event.json, null, 2)
+    document.getElementById('editableJsonTextarea').value = JSON.stringify(
+      event.json,
+      null,
+      2
+    );
   } catch (ignore_because_it_might_not_be_json) {
-    document.getElementById("editableJsonTextarea").value = event.json
+    document.getElementById('editableJsonTextarea').value = event.json;
   }
 }
 
 function addNewThingIntoDroplist(title) {
-  const dropdown = document.getElementById("definedEventsSelector")
-  const newOption = document.createElement("option")
-  newOption.value = title
-  newOption.text = title
-  dropdown.appendChild(newOption)
+  const dropdown = document.getElementById('definedEventsSelector');
+  const newOption = document.createElement('option');
+  newOption.value = title;
+  newOption.text = title;
+  dropdown.appendChild(newOption);
 }
 
 function save() {
-
   function addNewThingIntoDroplist(title) {
-    const dropdown = document.getElementById("definedEventsSelector")
-    const newOption = document.createElement("option")
-    newOption.value = title
-    newOption.text = title
-    dropdown.appendChild(newOption)
-    newOption.selected = true
+    const dropdown = document.getElementById('definedEventsSelector');
+    const newOption = document.createElement('option');
+    newOption.value = title;
+    newOption.text = title;
+    dropdown.appendChild(newOption);
+    newOption.selected = true;
   }
 
   function setAsSelectedThisThing(title) {
-    const dropdown = document.getElementById("definedEventsSelector")
+    const dropdown = document.getElementById('definedEventsSelector');
     for (let i = 0; i < dropdown.options.length; i++) {
       const option = dropdown.options[i];
       if (option.value === title) {
@@ -432,45 +431,53 @@ function save() {
     }
   }
   try {
-    const wellFormedJson = document.getElementById("editableJsonTextarea").value
+    const wellFormedJson = document.getElementById(
+      'editableJsonTextarea'
+    ).value;
     if (beautify() === true) {
       const mightBeGood = {
-        title: document.getElementById("title").value,
-        event: document.getElementById("event").value,
+        title: document.getElementById('title').value,
+        event: document.getElementById('event').value,
         created: getPrettyDate(),
-        json: wellFormedJson
-      }
-      let isOk = true
-      const failures = []
+        json: wellFormedJson,
+      };
+      let isOk = true;
+      const failures = [];
       for (let key in mightBeGood) {
         if (mightBeGood[key].length < 2) {
-          failures.push(key)
-          isOk = false
+          failures.push(key);
+          isOk = false;
         }
       }
       if (isOk === false) {
-        alert("You are missing fields\nNote: Need at least 1 char per field:\n" + JSON.stringify(failures))
+        alert(
+          'You are missing fields\nNote: Need at least 1 char per field:\n' +
+            JSON.stringify(failures)
+        );
       } else {
-        const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY)
-        const events = JSON.parse(rawString)
+        const rawString = localStorage.getItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY);
+        const events = JSON.parse(rawString);
         if (!events.hasOwnProperty(mightBeGood.title)) {
-          addNewThingIntoDroplist(mightBeGood.title)
+          addNewThingIntoDroplist(mightBeGood.title);
         } else {
-          setAsSelectedThisThing(mightBeGood.title)
+          setAsSelectedThisThing(mightBeGood.title);
         }
 
         events[mightBeGood.title] = {
           event: mightBeGood.event,
           created: mightBeGood.created,
-          json: JSON.parse(mightBeGood.json)
-        }
-        giveHumanSomeHappyFeedBack()
-        localStorage.setItem(LOCAL_STORAGE_GLOBAL_EVENTS_KEY, JSON.stringify(events));
+          json: JSON.parse(mightBeGood.json),
+        };
+        giveHumanSomeHappyFeedBack();
+        localStorage.setItem(
+          LOCAL_STORAGE_GLOBAL_EVENTS_KEY,
+          JSON.stringify(events)
+        );
       }
     }
   } catch (ouch) {
-    alert(ouch)
+    alert(ouch);
   }
 }
 
-populateDropdown()
+populateDropdown();
