@@ -45,7 +45,6 @@ function giveHumanSomeHappyFeedBack() {
 }
 
 const default_events = {
-  /* 
   'app-response': {
     event: 'app-response',
     created: getPrettyDate(),
@@ -152,7 +151,6 @@ const default_events = {
       'random_to_check_for_persistence(sic)': Math.random(),
     },
   },
-  */
 };
 
 // COMMENT OUT FOR TDD!
