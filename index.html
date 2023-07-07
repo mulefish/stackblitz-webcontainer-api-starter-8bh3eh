@@ -27,9 +27,11 @@
         `memory.js`
       ];
       resources.forEach((thing) => {
+        console.log("load resource: " + thing) 
         const script = document.createElement('script');
         script.src = thing;
         document.head.appendChild(script);
+
       });
     }
   </script>
