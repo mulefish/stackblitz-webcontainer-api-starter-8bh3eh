@@ -13,8 +13,8 @@
     async function getDynamicaSrc() {
       const version = 'latest';
       const now = Date.now();
-      const host = 'https://dxa4wb90x7ize.cloudfront.net/stage/';
-      // const host = 'https://shop.lululemon.com/static/fmodules/dcp/';
+      // const host = 'https://dxa4wb90x7ize.cloudfront.net/stage/';
+      const host = 'https://shop.lululemon.com/static/fmodules/dcp/';
       const resources = [
         `https://assets.adobedtm.com/7a84fdea953b/09aece6f582f/launch-e6cc9ebc113b-development.min.js`,
         `${host}transformation-configs/${version}/transformation-configs-remoteEntry.js?time=${now}`,
@@ -40,7 +40,7 @@
 <body>
   <div id="showThis">
     <button onClick="loadGui()" class="meta">Load gui</button>
-
+!
     <a
       href="https://stackblitz.com/edit/stackblitz-webcontainer-api-starter-47bkwn?file=README.md,index.html">stackblitz</a>
 
