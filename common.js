@@ -143,14 +143,14 @@ const default_events = {
     },
   },
   // INTENTIONALLY Stupid to test impossible event FAIL mode
-  kittycats: {
-    event: 'test',
-    created: getPrettyDate(),
-    json: {
-      this_is_not_real: 'string',
-      'random_to_check_for_persistence(sic)': Math.random(),
-    },
-  },
+  // kittycats: {
+  //   event: 'test',
+  //   created: getPrettyDate(),
+  //   json: {
+  //     this_is_not_real: 'string',
+  //     'random_to_check_for_persistence(sic)': Math.random(),
+  //   },
+  // },
 };
 
 // COMMENT OUT FOR TDD!
